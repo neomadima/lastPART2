@@ -1,0 +1,7 @@
+C:\Users\neoMadima\source\repos\lastPART2\lastPART2\bin\Debug\lastPART2.exe.config
+C:\Users\neoMadima\source\repos\lastPART2\lastPART2\bin\Debug\lastPART2.exe
+C:\Users\neoMadima\source\repos\lastPART2\lastPART2\bin\Debug\lastPART2.pdb
+C:\Users\neoMadima\source\repos\lastPART2\lastPART2\obj\Debug\lastPART2.csproj.AssemblyReference.cache
+C:\Users\neoMadima\source\repos\lastPART2\lastPART2\obj\Debug\lastPART2.csproj.CoreCompileInputs.cache
+C:\Users\neoMadima\source\repos\lastPART2\lastPART2\obj\Debug\lastPART2.exe
+C:\Users\neoMadima\source\repos\lastPART2\lastPART2\obj\Debug\lastPART2.pdb
