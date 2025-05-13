@@ -1,0 +1,43 @@
+name: .NET CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+
+    - name: 🔍 Show directory structure (Debug Step)
+      run: |
+        echo "Current working directory:"
+        pwd
+        echo "Directory contents:"
+        dir -Recurse
+      shell: pwsh
+
+    - name: 🛠 Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x' # Change to your version if needed
+
+    - name: 🔧 Restore
+      run: |
+        echo "Looking for .sln file..."
+        Get-ChildItem -Recurse -Filter *.sln
+
+        echo "Looking for .csproj file..."
+        Get-ChildItem -Recurse -Filter *.csproj
+
+        echo "Attempting dotnet restore..."
+        dotnet restore
+      shell: pwsh
+
+    - name: 🏗 Build
+      run: dotnet build --configuration Release --no-restore
