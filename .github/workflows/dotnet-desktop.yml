@@ -52,12 +52,13 @@ jobs:
         }
       shell: pwsh
 
-    - name: Restore Dependencies
-      run: dotnet restore ${{ env.Solution_Name }}
+    - name: Restore NuGet packages
+      run: dotnet restore  <path-to-sln> ${{ env.Solution_Name }}
 
     - name: Build Solution
       run: dotnet build ${{ env.Solution_Name }} --configuration ${{ matrix.configuration }} --no-restore
 
+ 
     - name: Run Tests (if any)
       run: |
         if (Test-Path "CyberSecurity_Awareness_Bot.Tests") {
