@@ -1,0 +1,72 @@
+name: CyberSecurity_Awareness_Bot
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+
+    runs-on: windows-latest
+
+    env:
+      Solution_Name: CyberSecurity_Awareness_Bot.sln
+      Project_Path: CyberSecurity_Awareness_Bot\CyberSecurity_Awareness_Bot.csproj
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Cache NuGet Packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
+    - name: Install .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x  # Adjust if needed
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Validate Paths
+      run: |
+        if (-not (Test-Path -Path "${{ env.Solution_Name }}")) {
+          Write-Error "❌ Solution file not found!"
+          exit 1
+        }
+        if (-not (Test-Path -Path "${{ env.Project_Path }}")) {
+          Write-Error "❌ Project file not found!"
+          exit 1
+        }
+      shell: pwsh
+
+    - name: Restore Dependencies
+      run: dotnet restore ${{ env.Solution_Name }}
+
+    - name: Build Solution
+      run: dotnet build ${{ env.Solution_Name }} --configuration ${{ matrix.configuration }} --no-restore
+
+    - name: Run Tests (if any)
+      run: |
+        if (Test-Path "CyberSecurity_Awareness_Bot.Tests") {
+          dotnet test CyberSecurity_Awareness_Bot.Tests\CyberSecurity_Awareness_Bot.Tests.csproj --configuration ${{ matrix.configuration }} --no-restore
+        }
+      shell: pwsh
+
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: Build Output
+        path: bin\${{ matrix.configuration }}\net9.0
